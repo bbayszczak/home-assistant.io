@@ -66,9 +66,9 @@ For each paired shutter, you can use Home Assistant to:
 - Close the shutter. The motor runs until its end stop.
 - Stop the shutter where it is.
 
-The shutters report an assumed state. The radio link only goes one way: the dongle transmits, and the motors never answer. Home Assistant therefore shows what the last command it sent implies, not what the shutter is actually doing. A shutter moved with its own remote, or one that did not receive the frame, keeps the state Home Assistant assumed. The state is restored after a Home Assistant restart.
+The shutters report no state. The radio link only goes one way: the dongle transmits and the motors never answer, so Home Assistant cannot know whether a shutter is open or closed. Rather than guess from the last command it sent — a guess that any use of the original remote would invalidate — it reports the state as unknown, and the open, close, and stop buttons stay available at all times.
 
-Because the position is unknown, the shutters have no position slider, and stopping one mid-travel leaves the shown state untouched.
+The position is unknown for the same reason, so the shutters have no position slider.
 
 ## Data updates
 
@@ -130,6 +130,7 @@ automation: |
 ## Known limitations
 
 - **No feedback from the shutters.** The dongle only transmits. A successful command means a radio frame was sent, never that a shutter moved. If a shutter is out of range or its motor is unpowered, Home Assistant still reports the command as done.
+- **No state.** A shutter is always reported as unknown, so you cannot base an automation or a condition on whether it is open or closed. Commands can be sent at any time, which is what matters in practice.
 - **No position control.** The motors cannot be sent to a given position over this protocol, so the shutters have no position slider and report no percentage.
 - **The favorite position is not exposed.** Neosol motors can store a favorite position, but the integration does not offer it.
 - **Pairing is not done from Home Assistant.** Adding a shutter to a channel requires the shutter's own remote. The integration only drives channels that are already paired.
