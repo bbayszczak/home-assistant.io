@@ -156,7 +156,7 @@ automation: |
 - **The favorite position is not exposed.** Neosol motors can store a favorite position, but the integration does not offer it.
 - **A pairing cannot be confirmed.** The dongle counts the attempt as a transmission whether or not the shutter accepted it, so a failed attempt still produces a shutter, and uses up one of the fifty channels. Delete it and try again.
 - **Pairing still needs the original remote.** Home Assistant opens the window, but the sequence that selects the shutter is performed on its own remote.
-- **One integration entry per dongle.** A single dongle reaches only the shutters paired with its own channels.
+- **One dongle per installation.** The integration takes a single configuration entry, and a dongle only reaches the shutters paired with its own channels.
 - **Commands are sent one at a time.** The dongle has a single serial link, so closing ten shutters at once sends ten frames in sequence rather than simultaneously.
 
 ## Troubleshooting
