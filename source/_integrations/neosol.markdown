@@ -39,9 +39,9 @@ Other dongle references from the same family may work, but none has been tested.
 
 ## Prerequisites
 
-1. Pair each shutter you want to control with a channel of the dongle. Pairing is done with the shutter's own remote and the dongle's own tooling, not from Home Assistant.
-2. Plug the dongle into a USB port of the machine that runs Home Assistant.
-3. Place the dongle within radio range of the shutters. It transmits at 868&nbsp;MHz, so thick walls and metal shutter boxes reduce the range.
+1. Plug the dongle into a USB port of the machine that runs Home Assistant.
+2. Place the dongle within radio range of the shutters. It transmits at 868&nbsp;MHz, so thick walls and metal shutter boxes reduce the range.
+3. Keep the original remote of each shutter at hand. It is what selects the shutter during pairing, and shutters already paired with your dongle are picked up automatically.
 
 {% include integrations/config_flow.md %}
 
@@ -77,6 +77,27 @@ The shutters themselves send nothing back, so there is nothing to poll on them.
 Home Assistant {% term polling polls %} the dongle every 5 minutes for its channel list. This serves two purposes: it confirms the dongle is still reachable, and it picks up shutters you paired after the setup. A shutter paired with a new channel appears as a new device within 5 minutes, without restarting Home Assistant.
 
 If the dongle stops answering, for example because it was unplugged, the shutters become unavailable and Home Assistant reconnects on its own once it is plugged back in.
+
+## Pairing a shutter
+
+Shutters that already use a channel of your dongle appear on their own. To add one, go to **Settings** > **Devices & services**, select the Profalux Neosol integration, and select **Configure**.
+
+The dongle does not pair a shutter by itself: it opens a window of about a minute, and the shutter you drive from its own remote during that window is the one that gets paired. The others are left alone.
+
+Before you start, move the shutter to mid-travel and keep its remote at hand. Once you confirm, you have 60 seconds to perform this sequence on the remote:
+
+1. Press up, and wait for the shutter to reach the top.
+2. Press down, and let about four slats appear.
+3. Press stop.
+4. Press up again, and wait for the top.
+
+Then leave the shutter alone until the window closes. The new shutter appears within a few seconds.
+
+Pairing is additive: the shutter keeps answering its original remote, and any channel it was already paired with.
+
+### If the pairing did not take
+
+Home Assistant cannot tell a successful pairing from a failed one, because the motors never answer. A channel counts as used as soon as the window is opened, so a shutter appears either way. If the new shutter does not obey its controls, delete its device from the integration page and start again. Deleting it also keeps it from coming back on the next refresh.
 
 ## Neosol automation examples
 
@@ -133,7 +154,8 @@ automation: |
 - **No state.** A shutter is always reported as unknown, so you cannot base an automation or a condition on whether it is open or closed. Commands can be sent at any time, which is what matters in practice.
 - **No position control.** The motors cannot be sent to a given position over this protocol, so the shutters have no position slider and report no percentage.
 - **The favorite position is not exposed.** Neosol motors can store a favorite position, but the integration does not offer it.
-- **Pairing is not done from Home Assistant.** Adding a shutter to a channel requires the shutter's own remote. The integration only drives channels that are already paired.
+- **A pairing cannot be confirmed.** The dongle counts the attempt as a transmission whether or not the shutter accepted it, so a failed attempt still produces a shutter, and uses up one of the fifty channels. Delete it and try again.
+- **Pairing still needs the original remote.** Home Assistant opens the window, but the sequence that selects the shutter is performed on its own remote.
 - **One integration entry per dongle.** A single dongle reaches only the shutters paired with its own channels.
 - **Commands are sent one at a time.** The dongle has a single serial link, so closing ten shutters at once sends ten frames in sequence rather than simultaneously.
 
@@ -191,5 +213,7 @@ The dongle stopped answering. Check that it is still plugged in, and that no oth
 This integration follows standard integration removal. No extra steps are required.
 
 {% include integrations/remove_device_service.md %}
+
+You can also delete a single shutter from the integration page, which is how you get rid of one whose pairing did not take. Home Assistant remembers the deletion, so the shutter does not reappear; setting the integration up again brings it back.
 
 Removing the integration does not unpair the shutters from the dongle. They keep working with their own remotes, and setting the integration up again brings them all back.
