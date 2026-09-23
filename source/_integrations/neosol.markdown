@@ -79,7 +79,7 @@ If the dongle stops answering, for example because it was unplugged, the shutter
 
 ## Pairing a shutter
 
-Shutters that already use a channel of your dongle appear on their own. To add one, go to **Settings** > **Devices & services**, select the Profalux Neosol integration, and select **Configure**.
+Shutters that already use a channel of your dongle appear on their own. To add one, go to **Settings** > **Devices & services**, select the Profalux Neosol integration, select **Configure**, and then **Pair a new shutter**.
 
 The dongle does not pair a shutter by itself: it opens a window of about a minute, and the shutter you drive from its own remote during that window is the one that gets paired. The others are left alone.
 
@@ -97,6 +97,21 @@ Pairing is additive: the shutter keeps answering its original remote, and any ch
 ### If the pairing did not take
 
 Home Assistant cannot tell a successful pairing from a failed one, because the motors never answer. A channel counts as used as soon as the window is opened, so a shutter appears either way. If the new shutter does not obey its controls, delete its device from the integration page and start again. Deleting it also keeps it from coming back on the next refresh.
+
+## Unpairing a shutter
+
+Unpairing makes a shutter stop obeying its dongle channel. The shutter keeps answering its original remote, and any other channel it is paired with.
+
+To unpair one, go to **Settings** > **Devices & services**, select the Profalux Neosol integration, select **Configure**, then **Unpair a shutter**, and select the shutter.
+
+Like pairing, unpairing is done from the shutter's own remote. Before you start, move the shutter to mid-travel with its remote. Once you confirm, you have one minute to perform this sequence on the remote:
+
+1. Press down, and wait for the shutter to reach the bottom.
+2. Press up, and let about two slats appear.
+3. Press stop.
+4. Press down again, and wait for the bottom.
+
+The shutter confirms with a short back-and-forth. Because the dongle receives nothing, that is the only sign the unpairing worked, so Home Assistant asks you whether you saw it. If you did, the shutter is removed from Home Assistant and does not come back. If you did not, the shutter stays paired, and you can start again.
 
 ## Neosol automation examples
 
@@ -213,6 +228,6 @@ This integration follows standard integration removal. No extra steps are requir
 
 {% include integrations/remove_device_service.md %}
 
-You can also delete a single shutter from the integration page, which is how you get rid of one whose pairing did not take. Home Assistant remembers the deletion, so the shutter does not reappear; setting the integration up again brings it back.
+You can also delete a single shutter from the integration page, which is how you get rid of one whose pairing did not take. Home Assistant remembers the deletion, so the shutter does not reappear; setting the integration up again brings it back. Deleting a shutter does not unpair it: it still obeys the dongle channel. To stop that, [unpair it](#unpairing-a-shutter) instead.
 
 Removing the integration does not unpair the shutters from the dongle. They keep working with their own remotes, and setting the integration up again brings them all back.
