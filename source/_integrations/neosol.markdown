@@ -35,7 +35,6 @@ Other dongle references from the same family may work, but none has been tested.
 ## Unsupported devices
 
 - The Calyps'HOME box and any shutter reached through it. The integration only talks to the USB dongle.
-- Shutters that are not paired with a channel of your dongle. Home Assistant only sees channels the dongle has already transmitted on.
 
 ## Prerequisites
 
@@ -194,7 +193,7 @@ Select the serial port that belongs to the dongle. If you have several serial de
 
 ### A shutter is missing
 
-Home Assistant only creates a device for channels the dongle has already transmitted on, which in practice means the paired ones. If a shutter is missing, it is not paired with any channel of this dongle. Pair it with the shutter's own remote, then wait up to 5 minutes for it to appear.
+Home Assistant only creates a device for channels the dongle has already transmitted on. If a shutter is missing, it is not paired with any channel of this dongle. Pair it as described in [Pairing a shutter](#pairing-a-shutter).
 
 ### A shutter does not move
 
