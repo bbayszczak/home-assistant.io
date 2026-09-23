@@ -52,7 +52,7 @@ Serial port:
     description: "The serial port the dongle is plugged into. For example, `/dev/ttyACM0`. Home Assistant stores the stable `/dev/serial/by-id/` path for it, so the dongle keeps working after a reboot even if the port number changes. The port is checked before the setup completes."
 {% endconfiguration_basic %}
 
-If you move the dongle to another USB port, Home Assistant updates the stored port by itself the next time it is plugged in. You can also point the integration at a different port at any time with the **Reconfigure** option of the integration entry.
+The stored path follows the dongle rather than the USB port, so you can plug it into another port and Home Assistant reconnects to it on its own. If the path changes anyway, for example on a system that has no `/dev/serial/by-id/` directory, select the new port with the **Reconfigure** option of the integration entry.
 
 ## Supported functionality
 
