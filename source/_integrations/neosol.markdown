@@ -90,7 +90,7 @@ Before you start, move the shutter to mid-travel and keep its remote at hand. On
 3. Press stop.
 4. Press up again, and wait for the top.
 
-Then leave the shutter alone until the window closes. Home Assistant then moves it down briefly, and asks you whether it moved. If it did, the shutter is paired, and appears within a few seconds.
+Then leave the shutter alone until the window closes. Home Assistant then moves it up, then down, briefly, and asks you whether it moved. If it did, the shutter is paired, and appears within a few seconds.
 
 Pairing is additive: the shutter keeps answering its original remote, and any channel it was already paired with.
 
@@ -98,7 +98,7 @@ Pairing is additive: the shutter keeps answering its original remote, and any ch
 
 The motors never answer, so Home Assistant relies on you to tell whether the shutter moved when it checked. If you answer that it did not, the pairing did not take: Home Assistant leaves the channel out, and you can start again.
 
-If you leave the flow before answering, the shutter appears either way. If it does not obey its controls, delete its device from the integration page and start again. Deleting it also keeps it from coming back on the next refresh.
+If you leave the flow before answering, the shutter appears either way. If it does not obey its controls, [forget it](#forgetting-a-shutter), and start again.
 
 ## Unpairing a shutter
 
@@ -113,10 +113,16 @@ Like pairing, unpairing is done from the shutter's own remote. Before you start,
 3. Press stop.
 4. Press down again, and wait for the bottom.
 
-The shutter should answer with a short back-and-forth. Once the minute is over, Home Assistant moves it up briefly, and asks you whether it moved:
+The shutter should answer with a short back-and-forth. Once the minute is over, Home Assistant moves it up, then down, briefly, and asks you whether it moved:
 
 - If it did not move, the unpairing worked. The shutter is removed from Home Assistant, and does not come back.
 - If it moved, it still obeys the channel. It stays in Home Assistant, and you can start again.
+
+## Forgetting a shutter
+
+Forgetting a shutter removes it from Home Assistant **without unpairing it**. It is meant for a shutter that no longer obeys its channel, for example after a failed pairing, or once its motor was replaced. A shutter that still obeys has to be [unpaired](#unpairing-a-shutter) instead.
+
+To forget one, go to **Settings** > **Devices & services**, select the Profalux Neosol integration, select **Configure**, then **Forget a shutter**, and select the shutter. Home Assistant moves it up, then down, briefly, and asks you whether it moved. It only forgets the shutter if it did not.
 
 ## Neosol automation examples
 
@@ -173,7 +179,7 @@ automation: |
 - **No state.** A shutter is always reported as unknown, so you cannot base an automation or a condition on whether it is open or closed. Commands can be sent at any time, which is what matters in practice.
 - **No position control.** The motors cannot be sent to a given position over this protocol, so the shutters have no position slider and report no percentage.
 - **The favorite position is not exposed.** Neosol motors can store a favorite position, but the integration does not offer it.
-- **Pairing and unpairing are checked by you.** The motors never answer, so Home Assistant moves the shutter briefly at the end, and relies on you to tell whether it moved. A failed pairing still uses up one of the fifty channels.
+- **Pairing and unpairing are checked by you.** The motors never answer, so Home Assistant moves the shutter briefly at the end, and relies on you to tell whether it moved.
 - **Pairing still needs the original remote.** Home Assistant opens the window, but the sequence that selects the shutter is performed on its own remote.
 - **One dongle per installation.** The integration takes a single configuration entry, and a dongle only reaches the shutters paired with its own channels.
 - **Commands are sent one at a time.** The dongle has a single serial link, so closing ten shutters at once sends ten frames in sequence rather than simultaneously.
@@ -233,6 +239,6 @@ This integration follows standard integration removal. No extra steps are requir
 
 {% include integrations/remove_device_service.md %}
 
-You can also delete a single shutter from the integration page, which is how you get rid of one whose pairing did not take. Home Assistant remembers the deletion, so the shutter does not reappear; setting the integration up again brings it back. Deleting a shutter does not unpair it: it still obeys the dongle channel. To stop that, [unpair it](#unpairing-a-shutter) instead.
+A single shutter cannot be deleted from its device page. To remove one, [unpair it](#unpairing-a-shutter), or [forget it](#forgetting-a-shutter) if it no longer obeys its channel. Both check first that the shutter no longer moves, so that its channel can safely be paired again. A shutter deleted while it still obeys would share its channel with the next shutter paired on it, and move along with it.
 
 Removing the integration does not unpair the shutters from the dongle. They keep working with their own remotes, and setting the integration up again brings them all back.
